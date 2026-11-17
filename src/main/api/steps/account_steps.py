@@ -10,10 +10,19 @@ from src.main.api.steps.base_steps import BaseSteps
 class AccountSteps(BaseSteps):
     def create_account(self, request: CreateAccountRequestModel) -> CreateAccountResponseModel:
         requester = ValidateCrudRequester(
-            request_spec=RequestSpecs.base_headers(),
-            endpoint=EndpointRequest.CREATE_ACCOUNT,
-            response_spec=ResponseSpecs.request_ok(),
+            request_spec = RequestSpecs.base_headers(),
+            endpoint = EndpointRequest.CREATE_ACCOUNT,
+            response_spec = ResponseSpecs.request_ok(),
         )
         response_model = requester.post(request)
         self.created_obj.append(response_model.student.id)
+        return response_model
+
+    def delete_account(self,student_id: int):
+        requester = ValidateCrudRequester(
+            request_spec = RequestSpecs.base_headers(),
+            endpoint = EndpointRequest.DELETE_ACCOUNT,
+            response_spec = ResponseSpecs.request_ok(),
+        )
+        response_model = requester.delete(student_id = student_id)
         return response_model

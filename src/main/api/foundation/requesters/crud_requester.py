@@ -26,3 +26,21 @@ class CrudRequester(HttpRequester):
             allure.attachment_type.JSON)
         self.response_spec(response)
         return response
+
+    def delete(self, student_id: int) -> Response:
+        url = f"{Config.fetch('backendUrl')}{self.endpoint.value.url.format(student_id=student_id)}"
+
+        with allure.step(f"DELETE {url}"):
+            pass
+
+        response = requests.delete(
+            url=url,
+            headers=self.request_spec
+        )
+        allure.attach(
+            response.text,
+            "Response body",
+            allure.attachment_type.JSON
+        )
+        self.response_spec(response)
+        return response

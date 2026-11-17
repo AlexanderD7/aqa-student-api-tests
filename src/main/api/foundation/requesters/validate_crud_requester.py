@@ -15,3 +15,7 @@ class ValidateCrudRequester(HttpRequester):
     def post(self, model: BaseModel) -> BaseModel:
         response = self.crud_requester.post(model)
         return self.endpoint.value.response_model(**response.json())
+
+    def delete(self, student_id: int) -> BaseModel:
+        response = self.crud_requester.delete(student_id=student_id)
+        return self.endpoint.value.response_model(**response.json())
