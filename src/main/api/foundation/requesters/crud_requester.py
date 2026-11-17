@@ -64,3 +64,18 @@ class CrudRequester(HttpRequester):
         )
         self.response_spec(response)
         return response
+    def put(self, model: BaseModel, student_id: int) -> Response:
+        url = f"{Config.fetch('backendUrl')}{self.endpoint.value.url.format(student_id=student_id)}"
+        body = model.model_dump()
+
+        with allure.step(f"PUT {url}"):
+            allure.attach(str(body), "Request body", allure.attachment_type.JSON)
+
+        response = requests.put(
+            url=url,
+            headers=self.request_spec,
+            json=body
+        )
+        allure.attach(response.text, "Response body", allure.attachment_type.JSON)
+        self.response_spec(response)
+        return response

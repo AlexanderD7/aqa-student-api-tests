@@ -7,6 +7,8 @@ from src.main.api.models.create_account_response import CreateAccountResponseMod
 from src.main.api.models.delete_account_response_model import DeleteAccountResponseModel
 from src.main.api.models.get_student_response_model import GetStudentResponseModel
 from src.main.api.models.get_students_response_model import GetStudentsResponseModel
+from src.main.api.models.update_account_request_model import UpdateAccountRequestModel
+from src.main.api.models.update_account_response_model import UpdateAccountResponseModel
 
 
 @dataclass
@@ -36,4 +38,9 @@ class EndpointRequest(Enum):
         request_model = None,
         url = "/student",
         response_model = GetStudentsResponseModel
+    )
+    PUT_ACCOUNT_UPDATE = EndpointConfiguration(
+        request_model = UpdateAccountRequestModel,
+        url = "/student/{student_id}",
+        response_model = UpdateAccountResponseModel
     )

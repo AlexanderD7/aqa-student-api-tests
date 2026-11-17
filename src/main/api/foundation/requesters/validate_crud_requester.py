@@ -22,3 +22,6 @@ class ValidateCrudRequester(HttpRequester):
     def get(self, student_id: Optional[int] = None) -> BaseModel:
         response = self.crud_requester.get(student_id = student_id)
         return self.endpoint.value.response_model(**response.json())
+    def put(self, model: BaseModel, student_id: int) -> BaseModel:
+        response = self.crud_requester.put(model, student_id=student_id)
+        return self.endpoint.value.response_model(**response.json())

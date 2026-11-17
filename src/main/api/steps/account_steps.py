@@ -7,6 +7,8 @@ from src.main.api.specs.response_specs import ResponseSpecs
 from src.main.api.steps.base_steps import BaseSteps
 from src.main.api.models.get_student_response_model import GetStudentResponseModel
 from src.main.api.models.get_students_response_model import GetStudentsResponseModel
+from src.main.api.models.update_account_request_model import UpdateAccountRequestModel
+from src.main.api.models.update_account_response_model import UpdateAccountResponseModel
 
 class AccountSteps(BaseSteps):
     def create_account(self, request: CreateAccountRequestModel) -> CreateAccountResponseModel:
@@ -43,3 +45,10 @@ class AccountSteps(BaseSteps):
         )
         response_model = requester.get()
         return response_model
+    def update_account(self, student_id: int, request: UpdateAccountRequestModel) -> UpdateAccountResponseModel:
+        requester = ValidateCrudRequester(
+            request_spec=RequestSpecs.base_headers(),
+            endpoint=EndpointRequest.PUT_ACCOUNT_UPDATE,
+            response_spec=ResponseSpecs.request_ok(),
+        )
+        return requester.put(request, student_id=student_id)
