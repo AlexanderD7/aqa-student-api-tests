@@ -5,6 +5,8 @@ from src.main.api.models.base_model import BaseModel
 from src.main.api.models.create_account_request import CreateAccountRequestModel
 from src.main.api.models.create_account_response import CreateAccountResponseModel
 from src.main.api.models.delete_account_response_model import DeleteAccountResponseModel
+from src.main.api.models.get_student_response_model import GetStudentResponseModel
+from src.main.api.models.get_students_response_model import GetStudentsResponseModel
 
 
 @dataclass
@@ -24,4 +26,14 @@ class EndpointRequest(Enum):
         request_model = None,
         url = "/student/{student_id}",
         response_model = DeleteAccountResponseModel
+    )
+    GET_ACCOUNT = EndpointConfiguration(
+        request_model = None,
+        url = "/student/{student_id}",
+        response_model = GetStudentResponseModel
+    )
+    GET_ACCOUNTS = EndpointConfiguration(
+        request_model = None,
+        url = "/student",
+        response_model = GetStudentsResponseModel
     )

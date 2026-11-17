@@ -44,3 +44,23 @@ class CrudRequester(HttpRequester):
         )
         self.response_spec(response)
         return response
+    def get(self, student_id: Optional[int] = None) -> Response:
+        url_template = self.endpoint.value.url
+        if student_id is not None:
+            url = f"{Config.fetch('backendUrl')}{url_template.format(student_id=student_id)}"
+        else:
+            url = f"{Config.fetch('backendUrl')}{url_template}"
+
+        with allure.step(f"GET {url}"):
+            pass
+        response = requests.get(
+            url=url,
+            headers=self.request_spec
+        )
+        allure.attach(
+            response.text,
+            "Response body",
+            allure.attachment_type.JSON
+        )
+        self.response_spec(response)
+        return response

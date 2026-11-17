@@ -5,7 +5,8 @@ from src.main.api.models.create_account_response import CreateAccountResponseMod
 from src.main.api.specs.request_specs import RequestSpecs
 from src.main.api.specs.response_specs import ResponseSpecs
 from src.main.api.steps.base_steps import BaseSteps
-
+from src.main.api.models.get_student_response_model import GetStudentResponseModel
+from src.main.api.models.get_students_response_model import GetStudentsResponseModel
 
 class AccountSteps(BaseSteps):
     def create_account(self, request: CreateAccountRequestModel) -> CreateAccountResponseModel:
@@ -25,4 +26,20 @@ class AccountSteps(BaseSteps):
             response_spec = ResponseSpecs.request_ok(),
         )
         response_model = requester.delete(student_id = student_id)
+        return response_model
+    def get_account(self,student_id: int) -> GetStudentResponseModel:
+        requester = ValidateCrudRequester(
+            request_spec= RequestSpecs.base_headers(),
+            endpoint = EndpointRequest.GET_ACCOUNT,
+            response_spec = ResponseSpecs.request_ok(),
+        )
+        response_model = requester.get(student_id = student_id)
+        return response_model
+    def get_accounts(self) -> GetStudentsResponseModel:
+        requester = ValidateCrudRequester(
+            request_spec= RequestSpecs.base_headers(),
+            endpoint = EndpointRequest.GET_ACCOUNTS,
+            response_spec = ResponseSpecs.request_ok(),
+        )
+        response_model = requester.get()
         return response_model

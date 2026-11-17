@@ -17,6 +17,8 @@ class CreateAccountRequestModel(BaseModel):
     email: Annotated[str, CreationRule(regex=r"^[a-z]{5,8}@example\.com$")]
     gender: Literal["male", "female"]
     name: str
-    phone_no: Annotated[str | None, BeforeValidator(generate_phone_if_missing)] = Field(
-    default=None, validate_default=True)
-    status: Literal[0,1]
+    # Добавляем CreationRule сюда:
+    phone_no: Annotated[str, CreationRule(regex=r"^\+7\d{10}$"), BeforeValidator(generate_phone_if_missing)] = Field(
+        default=None, validate_default=True
+    )
+    status: Literal[0, 1]
