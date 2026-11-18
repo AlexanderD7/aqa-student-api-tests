@@ -1,17 +1,18 @@
 from typing import Optional
 from requests import Response
 import requests
-
+import logging
 from src.main.api.configs.config import Config
 from src.main.api.foundation.requesters.http_requester import HttpRequester
 from src.main.api.models.base_model import BaseModel
 import allure
 
+logger = logging.getLogger(__name__)
 class CrudRequester(HttpRequester):
     def post(self, model: Optional[BaseModel]) -> BaseModel| Response:
         body = model.model_dump() if model is not None else ""
         url = f"{Config.fetch('backendUrl')}{self.endpoint.value.url}"
-
+        logger.info(f"Отправка POST на {url} с телом: {body}")
         with allure.step(f"POST {url}"):
             allure.attach(str(body), "Request body", allure.attachment_type.JSON )
 
@@ -29,7 +30,7 @@ class CrudRequester(HttpRequester):
 
     def delete(self, student_id: int) -> Response:
         url = f"{Config.fetch('backendUrl')}{self.endpoint.value.url.format(student_id=student_id)}"
-
+        logger.info(f"DELETE {url}")
         with allure.step(f"DELETE {url}"):
             pass
 
@@ -50,7 +51,7 @@ class CrudRequester(HttpRequester):
             url = f"{Config.fetch('backendUrl')}{url_template.format(student_id=student_id)}"
         else:
             url = f"{Config.fetch('backendUrl')}{url_template}"
-
+        logger.info(f"GET {url}")
         with allure.step(f"GET {url}"):
             pass
         response = requests.get(
@@ -67,7 +68,7 @@ class CrudRequester(HttpRequester):
     def put(self, model: BaseModel, student_id: int) -> Response:
         url = f"{Config.fetch('backendUrl')}{self.endpoint.value.url.format(student_id=student_id)}"
         body = model.model_dump()
-
+        logger.info(f"PUT {url} | Request body: {body}")
         with allure.step(f"PUT {url}"):
             allure.attach(str(body), "Request body", allure.attachment_type.JSON)
 
@@ -76,6 +77,7 @@ class CrudRequester(HttpRequester):
             headers=self.request_spec,
             json=body
         )
+        logger.info(f"Отправка POST на {url} с телом: {body}")
         allure.attach(response.text, "Response body", allure.attachment_type.JSON)
         self.response_spec(response)
         return response

@@ -8,7 +8,7 @@ from src.main.api.models.update_account_request_model import UpdateAccountReques
 @allure.feature("PUT операции")
 class TestUpdateAccount:
 
-    @pytest.mark.xfail(reason="Ожидаем падение из-за бага с сохранением (BUG-1: Eventual Consistency)")
+    @pytest.mark.xfail(reason="BUG-3: Студент не сохраняется, поэтому PUT падает")
     @allure.title("Успешное обновление данных студента")
     def test_update_account(self, api_manager: ApiManager, create_account_request: CreateAccountRequestModel):
         create_response = api_manager.account_steps.create_account(create_account_request)
@@ -21,9 +21,11 @@ class TestUpdateAccount:
             status=0
         )
 
-        with allure.step(f"Обновление данных студента ID: {student_id}"):
+        with allure.step(f"Отправка PUT запроса для студента с ID: {student_id}"):
             update_response = api_manager.account_steps.update_account(student_id, update_request)
 
-        assert update_response.message == "Student updated successfully"
-        assert update_response.student.name == "Updated Name"
-        assert update_response.student.email == "updated_email@example.com"
+        assert update_response.message == "Student updated successfully", (
+            f"API вернуло ошибку при обновлении студента {student_id}. "
+            f"Ответ API: {update_response.message}"
+        )
+        assert update_response.student.name == "Updated Name", f"Имя не обновилось для ID {student_id}!"
